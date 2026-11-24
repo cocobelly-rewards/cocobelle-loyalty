@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="hi" class="h-full bg-amber-50/40">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cocobelly - 10-Day Visit & Surprise Gift Tracker</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        cocoa: {
+                            50: '#fdf8f6',
+                            100: '#f2e8e3',
+                            200: '#e5d3c8',
+                            300: '#d1b5a3',
+                            400: '#b89078',
+                            500: '#a27256',
+                            600: '#8c5a41',
+                            700: '#724633',
+                            800: '#5c392b',
+                            900: '#3d2319',
+                            950: '#26130d',
+                        },
+                        amber: {
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .stamp-card-bg {
+            background-image: radial-gradient(#d1b5a3 1.5px, transparent 1.5px);
+            background-size: 16px 16px;
+        }
+        @keyframes pulse-amber {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.5); }
+            50% { transform: scale(1.04); box-shadow: 0 0 0 14px rgba(245, 158, 11, 0); }
+        }
+        .animate-amber-pulse {
+            animation: pulse-amber 2s infinite;
+        }
+    </style>
+</head>
+<body class="h-full font-sans text-stone-800 antialiased selection:bg-cocoa-700 selection:text-white flex flex-col min-h-screen">
+
+    <!-- Header / Navbar -->
+    <header class="bg-cocoa-900 text-white sticky top-0 z-30 shadow-lg border-b border-cocoa-800">
+        <div class="max-w-6xl mx-auto px-4 py-3.5 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-amber-500 via-cocoa-600 to-cocoa-800 flex items-center justify-center text-white shadow-md shadow-amber-500/20 border border-amber-400/30">
+                    <i class="fa-solid fa-store text-xl text-amber-300"></i>
+                </div>
+                <div>
+                    <h1 class="font-display text-xl font-extrabold tracking-wide text-white flex items-center gap-2">
+                        <span id="displayStoreName" class="bg-gradient-to-r from-amber-200 via-amber-400 to-amber-100 bg-clip-text text-transparent">Cocobelly</span>
+                    </h1>
+                    <p class="text-[11px] text-amber-300/90 font-medium tracking-wide">10-Day Store Visit Loyalty & Gifts 🎁</p>
+                </div>
+            </div>
+
+            <!-- Header Tabs: Customer View vs Owner Admin -->
+            <div class="flex items-center bg-cocoa-950/80 p-1 rounded-2xl border border-cocoa-800">
+                <button id="btnCustomerTab" onclick="switchView('customer')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-amber-600 text-cocoa-950 shadow-md">
+                    <i class="fa-solid fa-user-check"></i>
+                    <span>Customer View</span>
+                </button>
+                <button id="btnAdminTab" onclick="switchView('admin')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-amber-200 hover:text-white transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <span>Owner Login</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 max-w-5xl w-full mx-auto px-4 py-6">
+
+        <!-- ========================================================================= -->
+        <!-- VIEW 1: CUSTOMER VIEW (PUBLIC - NO PIN REQUIRED) -->
+        <!-- ========================================================================= -->
+        <section id="customerView" class="space-y-6">
+            
+            <!-- Cocobelly Welcome Hero Banner -->
+            <div class="bg-gradient-to-br from-cocoa-900 via-cocoa-800 to-amber-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden border border-cocoa-700">
+                <div class="absolute -right-8 -bottom-8 opacity-15 pointer-events-none">
+                    <i class="fa-solid fa-gift text-[200px] text-amber-400"></i>
+                </div>
+                <div class="max-w-xl relative z-10 space-y-3">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-extrabold bg-amber-400/20 text-amber-300 border border-amber-400/30 backdrop-blur-md uppercase tracking-wider">
+                        <i class="fa-solid fa-crown mr-1.5 text-amber-400"></i> Cocobelly Rewards Program
+                    </span>
+                    <h2 class="font-display text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+                        Har 10 Din Cocobelly Aayein & Exclusive Gift Payein!
+                    </h2>
+                    <p class="text-cocoa-200 text-xs sm:text-sm leading-relaxed">
+                        Apna 10-digit registered mobile number daal kar apna visit status check karein. 
+                        <span class="text-amber-300 font-semibold underline underline-offset-2">Roz Cocobelly visit par store counter se stamp lagvana na bhulein!</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Customer Search Bar / Mobile Login -->
+            <div class="max-w-md mx-auto bg-white p-6 rounded-3xl shadow-lg border border-cocoa-100 space-y-4">
+                <label for="custMobileSearch" class="block text-xs font-bold text-cocoa-900 uppercase tracking-wider">
+                    <i class="fa-solid fa-mobile-screen mr-1 text-amber-500"></i> Apna Mobile Number Likhein
+                </label>
+                <div class="flex gap-2">
+                    <div class="relative flex-1">
+                        <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-cocoa-400 font-bold text-sm">+91</span>
+                        <input type="tel" id="custMobileSearch" inputmode="numeric" maxlength="13" placeholder="7808450835" 
+                            class="w-full pl-12 pr-4 py-3 bg-cocoa-50/50 border border-cocoa-200 rounded-2xl focus:ring-2 focus:ring-amber-500 focus:bg-white text-lg font-bold tracking-wider text-cocoa-950 outline-none transition font-mono"
+                            onkeyup="if(event.key === 'Enter') lookupCustomerProgress()">
+                    </div>
+                    <button onclick="lookupCustomerProgress()" class="px-5 bg-gradient-to-r from-cocoa-800 to-cocoa-900 hover:from-cocoa-900 hover:to-black text-amber-300 font-bold rounded-2xl shadow-md transition flex items-center justify-center gap-2 border border-cocoa-700">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <span>Check</span>
+                    </button>
+                </div>
+                
+                <!-- Quick hint for testing -->
+                <div class="flex items-center justify-between text-[11px] text-cocoa-500 pt-1 border-t border-cocoa-100">
+                    <span><i class="fa-solid fa-shield-halved text-emerald-600 mr-1"></i> Fast & Password-less login</span>
+                    <button onclick="fillDemoNumber('7808450835')" class="text-amber-700 font-bold hover:underline">Demo Number Try (7808450835)</button>
+                </div>
+            </div>
+
+            <!-- Customer Progress Result Card & 10-Stamp Grid (Hidden initially) -->
+            <div id="customerResultContainer" class="hidden max-w-2xl mx-auto space-y-6">
+                <!-- Customer Profile Info Box -->
+                <div class="bg-white rounded-3xl p-5 border border-cocoa-200 shadow-md flex items-center justify-between">
+                    <div>
+                        <span class="text-[11px] text-cocoa-400 font-bold uppercase tracking-wider">Customer Profile</span>
+                        <h3 id="resCustName" class="font-display text-xl font-extrabold text-cocoa-950">--</h3>
+                        <p id="resCustMobile" class="text-xs text-cocoa-500 font-mono font-bold">--</p>
+                    </div>
+                    <div class="text-right bg-amber-50 px-4 py-2 rounded-2xl border border-amber-200">
+                        <span class="text-[10px] text-amber-800 font-extrabold uppercase tracking-wider">Total Gifts Won</span>
+                        <div class="flex items-center justify-end gap-1.5 text-amber-600 font-extrabold text-xl">
+                            <i class="fa-solid fa-trophy"></i>
+                            <span id="resGiftsCount">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 10 Visit Digital Stamp Card -->
+                <div class="bg-white rounded-3xl p-6 sm:p-8 border border-cocoa-200 shadow-xl stamp-card-bg relative overflow-hidden">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h4 class="font-display font-extrabold text-lg text-cocoa-950">Cocobelly 10-Day Stamp Card</h4>
+                            <p class="text-xs text-cocoa-600 font-medium">Progress: <span id="resProgressText" class="font-bold text-amber-600">0/10 Visits</span></p>
+                        </div>
+                        <span id="resBadgeStatus" class="px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-amber-100 text-amber-900 border border-amber-300">
+                            In Progress
+                        </span>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="w-full bg-cocoa-100 h-3.5 rounded-full overflow-hidden mb-8 p-0.5 border border-cocoa-200">
+                        <div id="resProgressBar" class="h-full bg-gradient-to-r from-cocoa-600 via-amber-500 to-amber-400 rounded-full transition-all duration-500" style="width: 0%;"></div>
+                    </div>
+
+                    <!-- Grid of 10 Stamps -->
+                    <div class="grid grid-cols-5 sm:grid-cols-5 gap-3 sm:gap-4" id="stampGrid">
+                        <!-- JS renders 10 stamp slots -->
+                    </div>
+
+                    <!-- Custom Instructions Banner -->
+                    <div id="resMessageBanner" class="mt-8 p-4 rounded-2xl bg-gradient-to-r from-amber-50 to-amber-100/60 border border-amber-200/80 flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 mt-0.5">
+                            <i class="fa-solid fa-gift"></i>
+                        </div>
+                        <div class="text-xs sm:text-sm text-amber-950">
+                            <span class="font-bold block text-sm mb-0.5" id="resBannerTitle">Cocobelly Store Visit Karein!</span>
+                            <span id="resBannerDesc">Kharidari karte waqt Cocobelly counter par apna mobile number bata kar hazri mark karwayein.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Initial Empty State / How it works Guide -->
+            <div id="customerEmptyState" class="max-w-2xl mx-auto grid sm:grid-cols-3 gap-4 pt-2">
+                <div class="bg-white p-5 rounded-2xl border border-cocoa-100 shadow-sm text-center space-y-2">
+                    <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 mx-auto flex items-center justify-center font-bold">1</div>
+                    <h4 class="font-bold text-xs text-cocoa-900">Cocobelly Store Aayein</h4>
+                    <p class="text-[11px] text-cocoa-500">Har roj Cocobelly store par aakar apni favourite cheez khareedein.</p>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-cocoa-100 shadow-sm text-center space-y-2">
+                    <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 mx-auto flex items-center justify-center font-bold">2</div>
+                    <h4 class="font-bold text-xs text-cocoa-900">Number Se Stamp Lagayein</h4>
+                    <p class="text-[11px] text-cocoa-500">Owner counter par aapki hazri digital card par mark kar denge.</p>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-cocoa-100 shadow-sm text-center space-y-2">
+                    <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 mx-auto flex items-center justify-center font-bold">3</div>
+                    <h4 class="font-bold text-xs text-cocoa-900">10th Visit Surprise Gift!</h4>
+                    <p class="text-[11px] text-cocoa-500">10th visit poori hote hi aapko Cocobelly ki taraf se surprise gift milega!</p>
+                </div>
+            </div>
+
+            <!-- ===================================================================== -->
+            <!-- NEW SECTION 1: ACTIVE OFFERS (PUBLIC - NO PIN REQUIRED) -->
+            <!-- ===================================================================== -->
+            <div class="max-w-4xl mx-auto pt-4 space-y-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-xl bg-amber-500 text-cocoa-950 flex items-center justify-center shadow-sm">
+                            <i class="fa-solid fa-tags"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-display font-extrabold text-lg sm:text-xl text-cocoa-950">🔥 Cocobelly Special Offers</h3>
+                            <p class="text-xs text-cocoa-500">Aaj ke chal rahe best offers & deals (Bina kisi login ke dekhein)</p>
+                        </div>
+                    </div>
+                    <span class="px-3 py-1 rounded-full text-[11px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                        Live Deals
+                    </span>
+                </div>
+
+                <div id="publicOffersGrid" class="grid sm:grid-cols-2 gap-4">
+                    <!-- JS dynamically renders active offers -->
+                </div>
+            </div>
+
+            <!-- ===================================================================== -->
+            <!-- NEW SECTION 2: CUSTOMER REVIEWS (PUBLIC - NO PIN REQUIRED) -->
+            <!-- ===================================================================== -->
+            <div class="max-w-4xl mx-auto pt-4 space-y-5">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-xl bg-cocoa-900 text-amber-300 flex items-center justify-center shadow-sm">
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-display font-extrabold text-lg sm:text-xl text-cocoa-950">⭐ Customer Reviews & Feedback</h3>
+                            <p class="text-xs text-cocoa-500">Cocobelly ke baare mein apna experience share karein</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span id="avgRatingBadge" class="px-3 py-1 rounded-full text-xs font-extrabold bg-amber-100 text-amber-900 border border-amber-300">
+                            ★ 5.0 / 5
+                        </span>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-5 gap-6 items-start">
+                    <!-- Write a Review Form (Public) -->
+                    <form onsubmit="handlePublicReviewSubmit(event)" class="md:col-span-2 bg-white p-5 rounded-3xl border border-cocoa-200 shadow-md space-y-3.5">
+                        <h4 class="font-display font-extrabold text-sm text-cocoa-950 flex items-center gap-1.5">
+                            <i class="fa-solid fa-pen-to-square text-amber-500"></i> Apna Review Likhein
+                        </h4>
+                        
+                        <div>
+                            <label class="block text-[11px] font-bold text-cocoa-700 uppercase mb-1">Aapka Naam *</label>
+                            <input type="text" id="revNameInput" required placeholder="e.g. Neha Singh" 
+                                   class="w-full px-3.5 py-2 bg-cocoa-50/50 border border-cocoa-200 rounded-xl text-xs font-bold focus:ring-2 focus:ring-amber-500 outline-none text-cocoa-900">
+                        </div>
+
+                        <div>
+                            <label class="block text-[11px] font-bold text-cocoa-700 uppercase mb-1">Rating Dein *</label>
+                            <div class="flex items-center gap-1.5 text-xl" id="starRatingSelector">
+                                <button type="button" onclick="setReviewStars(1)" class="star-btn text-amber-400 hover:scale-110 transition" data-star="1">★</button>
+                                <button type="button" onclick="setReviewStars(2)" class="star-btn text-amber-400 hover:scale-110 transition" data-star="2">★</button>
+                                <button type="button" onclick="setReviewStars(3)" class="star-btn text-amber-400 hover:scale-110 transition" data-star="3">★</button>
+                                <button type="button" onclick="setReviewStars(4)" class="star-btn text-amber-400 hover:scale-110 transition" data-star="4">★</button>
+                                <button type="button" onclick="setReviewStars(5)" class="star-btn text-amber-400 hover:scale-110 transition" data-star="5">★</button>
+                                <span id="selectedStarText" class="text-xs font-bold text-cocoa-500 ml-2">(5 Stars)</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-[11px] font-bold text-cocoa-700 uppercase mb-1">Aapka Feedback *</label>
+                            <textarea id="revCommentInput" required rows="3" placeholder="Cocobelly ka taste, service ya gift aapko kaisa laga?" 
+                                      class="w-full px-3.5 py-2 bg-cocoa-50/50 border border-cocoa-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-amber-500 outline-none text-cocoa-900"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full py-2.5 bg-gradient-to-r from-cocoa-800 to-cocoa-900 hover:from-cocoa-900 hover:to-black text-amber-300 font-extrabold text-xs rounded-xl shadow-md transition flex items-center justify-center gap-1.5 border border-cocoa-700">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            <spa 
+                              n>Review Post Karein</span>
+                              </button>
+                    </form>
+
+                    <!-- Reviews List (Public) -->
+                    <div id="publicReviewsList" class="md:col-span-3 space-y-3 max-h-[380px] overflow-y-auto pr-1">
+                        <!-- JS dynamically renders customer reviews -->
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- ========================================================================= -->
+        <!-- VIEW 2: OWNER / ADMIN DASHBOARD (PIN PROTECTED) -->
+        <!-- ========================================================================= -->
+        <section id="adminView" class="hidden space-y-6">
+
+            <!-- PIN Lock Screen -->
+            <div id="adminPinScreen" class="max-w-md mx-auto bg-white p-6 sm:p-8 rounded-3xl shadow-xl border border-cocoa-200 text-center space-y-5">
+                <div class="w-16 h-16 bg-cocoa-100 text-cocoa-800 rounded-2xl mx-auto flex items-center justify-center text-2xl shadow-inner border border-cocoa-200">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <div>
+                    <h3 class="font-display font-extrabold text-xl text-cocoa-950">Cocobelly Owner Access</h3>
+                    <p class="text-xs text-cocoa-500 mt-1">Admin Dashboard kholne ke liye 4-digit PIN darj karein</p>
+                </div>
+
+                <div class="space-y-4">
+                    <input type="password" id="adminPinInput" inputmode="numeric" maxlength="6" placeholder="• • • •" 
+                           class="w-48 mx-auto text-center tracking-[0.8em] text-2xl font-bold py-3 bg-cocoa-50/50 border border-cocoa-300 rounded-2xl focus:ring-2 focus:ring-amber-500 outline-none text-cocoa-900 font-mono"
+                           oninput="onPinInput(this)"
+                           onkeyup="if(event.key==='Enter') verifyAdminPin()">
+                    
+                    <button onclick="verifyAdminPin()" class="w-full py-3 bg-cocoa-900 hover:bg-black text-amber-300 font-bold rounded-2xl shadow-md transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-key"></i>
+                        <span>Unlock Owner Panel</span>
+                    </button>
+                    
+                    <div class="pt-2 border-t border-cocoa-100 flex flex-col items-center gap-1.5">
+                        <p class="text-[11px] text-cocoa-500">Default PIN: <strong class="text-cocoa-900 font-mono">1234</strong></p>
+                        <button onclick="fillDefaultPin()" class="px-3 py-1 bg-amber-100 hover:bg-amber-200 text-amber-900 text-xs font-bold rounded-xl transition">
+                            ⚡ Direct Auto-Fill PIN (1234)
+                        </button>
+                    </div>
+                </div>
+            </div>
+          <!-- Main Owner Dashboard (Unlocked) -->
+            <div id="adminDashboard" class="hidden space-y-6">
+                
+                <!-- Dashboard Control Bar -->
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-5 rounded-3xl border border-cocoa-200 shadow-sm">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                                <i class="fa-solid fa-circle text-[7px] mr-1 text-emerald-500 animate-pulse"></i> Cocobelly Owner Active
+                            </span>
+                            <button onclick="lockAdmin()" class="text-xs text-cocoa-400 hover:text-red-600 font-bold transition">
+                                <i class="fa-solid fa-power-off"></i> Lock Panel
+                            </button>
+                        </div>
+                        <h2 class="font-display font-extrabold text-xl text-cocoa-950 mt-1">Grahak Visit & Gift Manager</h2>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                        <button onclick="openNewCustomerModal()" class="flex-1 sm:flex-none px-4 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-cocoa-950 font-extrabold text-xs sm:text-sm rounded-2xl shadow-md transition flex items-center justify-center gap-2 border border-amber-400">
+                            <i class="fa-solid fa-user-plus"></i>
+                            <span>Naya Grahak Joadein</span>
+                        </button>
+                        <button onclick="openSettingsModal()" class="p-2.5 bg-cocoa-100 hover:bg-cocoa-200 text-cocoa-800 rounded-2xl transition" title="Backup & Settings">
+                            <i class="fa-solid fa-sliders"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Live Metrics Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div class="bg-white p-4.5 rounded-3xl border border-cocoa-100 shadow-sm">
+                        <span class="text-[11px] font-extrabold text-cocoa-400 uppercase tracking-wider block">Total Customers</span>
+                        <div class="flex items-center justify-between mt-1">
+                            <span id="statTotalCustomers" class="font-display text-2xl font-extrabold text-cocoa-950">0</span>
+                            <i class="fa-solid fa-users text-cocoa-200 text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4.5 rounded-3xl border border-cocoa-100 shadow-sm">
+                        <span class="text-[11px] font-extrabold text-cocoa-400 uppercase tracking-wider block">Today's Visits</span>
+                        <div class="flex items-center justify-between mt-1">
+                            <span id="statTodayVisits" class="font-display text-2xl font-extrabold text-emerald-600">0</span>
+                            <i class="fa-solid fa-calendar-check text-emerald-200 text-xl"></i>
+                        </div>
+                    </div>
+                  <div class="bg-white p-4.5 rounded-3xl border border-cocoa-100 shadow-sm">
+                        <span class="text-[11px] font-extrabold text-cocoa-400 uppercase tracking-wider block">Gifts Ready (10/10)</span>
+                        <div class="flex items-center justify-between mt-1">
+                            <span id="statGiftsPending" class="font-display text-2xl font-extrabold text-amber-500">0</span>
+                            <i class="fa-solid fa-gift text-amber-200 text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4.5 rounded-3xl border border-cocoa-100 shadow-sm">
+                        <span class="text-[11px] font-extrabold text-cocoa-400 uppercase tracking-wider block">Gifts Delivered</span>
+                        <div class="flex items-center justify-between mt-1">
+                            <span id="statGiftsGiven" class="font-display text-2xl font-extrabold text-cocoa-700">0</span>
+                            <i class="fa-solid fa-award text-cocoa-200 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stamp Action Box -->
+                <div class="bg-gradient-to-r from-cocoa-900 via-cocoa-800 to-cocoa-950 p-5 rounded-3xl text-white shadow-xl space-y-3 border border-cocoa-700">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-display font-bold text-xs sm:text-sm text-amber-300 flex items-center gap-2">
+                            <i class="fa-solid fa-bolt text-amber-400"></i> Quick Stamp Counter (Grahak Ki Hazri Lagayein)
+                        </h3>
+                        <!-- Override switch for testing/demo -->
+                        <label class="inline-flex items-center cursor-pointer text-xs text-cocoa-300">
+                            <input type="checkbox" id="allowSameDayOverride" class="sr-only peer">
+                            <div class="relative w-8 h-4 bg-cocoa-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-cocoa-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-amber-400"></div>
+                            <span class="ml-2 text-[11px]">Testing Mode (Multiple stamps today)</span>
+                        </label>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <div class="relative flex-1">
+                            <i class="fa-solid fa-phone absolute left-3.5 top-1/2 -translate-y-1/2 text-cocoa-400 text-xs"></i>
+                            <input type="tel" id="quickMobileInput" placeholder="Mobile Number ya Customer Ka Naam Likhein..." 
+                                class="w-full pl-10 pr-4 py-2.5 bg-cocoa-950 border border-cocoa-700 rounded-2xl text-white placeholder-cocoa-400 focus:outline-none focus:border-amber-400 text-sm font-mono"
+                                onkeyup="filterAdminCustomerList()">
+                        </div>
+                        <button onclick="quickMarkVisitFromInput()" class="px-5 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-cocoa-950 font-extrabold text-xs sm:text-sm rounded-2xl shadow-md transition flex items-center justify-center gap-2 shrink-0">
+                            <i class="fa-solid fa-stamp"></i>
+                            <span>+1 Visit Stamp Lagayein</span>
+                        </button>
+                    </div>
+                </div>
+              <!-- Customer List Table -->
+                <div class="bg-white rounded-3xl border border-cocoa-200 shadow-sm overflow-hidden">
+                    <div class="p-4 bg-cocoa-50/50 border-b border-cocoa-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+                        <!-- Filters -->
+                        <div class="flex items-center gap-2 w-full sm:w-auto">
+                            <button onclick="setFilter('all')" id="filterAll" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-cocoa-900 text-white shadow-sm">
+                                Sabhi (All)
+                            </button>
+                            <button onclick="setFilter('gift-ready')" id="filterGiftReady" class="px-3 py-1.5 rounded-xl text-xs font-semibold text-cocoa-700 hover:bg-amber-100 hover:text-amber-900 transition">
+                                🎁 Gift Ready (10/10)
+                            </button>
+                            <button onclick="setFilter('today')" id="filterToday" class="px-3 py-1.5 rounded-xl text-xs font-semibold text-cocoa-700 hover:bg-cocoa-100 transition">
+                                Today's Visits
+                            </button>
+                        </div>
+
+                        <div class="text-xs text-cocoa-500 font-medium">
+                            Showing <span id="showingCount" class="font-bold text-cocoa-900">0</span> customer(s)
+                        </div>
+                    </div>
+
+                    <!-- Customer Cards List -->
+                    <div class="divide-y divide-cocoa-100" id="adminCustomerList">
+                        <!-- JS Dynamic Content -->
+                    </div>
+                </div>
+
+                <!-- ===================================================================== -->
+                <!-- ADMIN MANAGEMENT FOR OFFERS & REVIEWS -->
+                <!-- ===================================================================== -->
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Manage Store Offers -->
+                    <div class="bg-white rounded-3xl border border-cocoa-200 shadow-sm p-5 space-y-4">
+                        <div class="flex items-center justify-between border-b border-cocoa-100 pb-3">
+                            <h3 class="font-display font-extrabold text-base text-cocoa-950 flex items-center gap-2">
+                                <i class="fa-solid fa-tags text-amber-500"></i> Store Offers Manage Karein
+                            </h3>
+                        </div>
+
+                        <form onsubmit="handleAddOffer(event)" class="space-y-2.5">
+                            <input type="text" id="offerTitleInput" required placeholder="Offer Title (e.g. Buy 2 Get 1 Free)" 
+                                   class="w-full px-3.5 py-2 bg-cocoa-50/50 border border-cocoa-200 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-amber-500">
+                            <div class="flex gap-2">
+                                <input type="text" id="offerBadgeInput" placeholder="Tag (e.g. HOT DEAL)" 
+                                       class="w-1/3 px-3 py-2 bg-cocoa-50/50 border border-cocoa-200 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-amber-500">
+                                <input type="text" id="offerDescInput" required placeholder="Offer details likhein..." 
+                                       class="flex-1 px-3 py-2 bg-cocoa-50/50 border border-cocoa-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-amber-500">
+                            </div>
+                            <button type="submit" class="w-full py-2 bg-cocoa-900 hover:bg-black text-amber-300 font-bold text-xs rounded-xl transition">
+                                + Naya Offer Publish Karein
+                            </button>
+                        </form>
+
+                        <div id="adminOffersList" class="divide-y divide-cocoa-100 max-h-60 overflow-y-auto">
+                            <!-- JS renders admin offers -->
+                        </div>
+                    </div>
+
+                    <!-- Manage Customer Reviews -->
+                    <div class="bg-white rounded-3xl border border-cocoa-200 shadow-sm p-5 space-y-4">
+                        <div class="flex items-center justify-between border-b border-cocoa-100 pb-3">
+                            <h3 class="font-display font-extrabold text-base text-cocoa-950 flex items-center gap-2">
+                                <i class="fa-solid fa-comments text-amber-500"></i> Customer Reviews Manage Karein
+                            </h3>
+                            <span id="adminReviewCount" class="text-xs font-bold text-cocoa-500">0 Reviews</span>
+                        </div>
+
+                        <div id="adminReviewsList" class="divide-y divide-cocoa-100 max-h-80 overflow-y-auto">
+                            <!-- JS renders admin reviews with delete option -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto bg-white border-t border-cocoa-200 py-4 text-center text-xs text-cocoa-500">
+        <p>© <span id="yearSpan"></span> <strong class="text-cocoa-900">Cocobelly Store</strong> - Daily Visit & Loyalty Rewards</p>
+    </footer>
+
+
+    <!-- ========================================================================= -->
+    <!-- MODALS & DIALOGS -->
+    <!-- ========================================================================= -->
+
+    <!-- Modal 1: Add New Customer -->
+    <div id="modalNewCustomer" class="fixed inset-0 bg-cocoa-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-cocoa-100 space-y-5">
+            <div class="flex items-center justify-between border-b border-cocoa-100 pb-3">
+                <h3 class="font-display font-extrabold text-lg text-cocoa-950 flex items-center gap-2">
+                    <i class="fa-solid fa-user-plus text-amber-500"></i> Naya Grahak Register Karein
+                </h3>
+                <button onclick="closeModal('modalNewCustomer')" class="text-cocoa-400 hover:text-cocoa-700 p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <form onsubmit="handleCreateCustomer(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-cocoa-900 uppercase tracking-wider mb-1">Customer Ka Naam *</label>
+                    <input type="text" id="newCustName" required placeholder="e.g. Rahul Sharma" 
+                           class="w-full px-4 py-2.5 bg-cocoa-50/50 border border-cocoa-200 rounded-2xl text-sm font-bold focus:ring-2 focus:ring-amber-500 outline-none text-cocoa-900">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-cocoa-900 uppercase tracking-wider mb-1">Mobile Number (10 Digits) *</label>
+                    <div class="relative">
+                        <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-cocoa-400 text-xs font-bold">+91</span>
+                        <input type="tel" id="newCustMobile" required maxlength="10" pattern="[0-9]{10}" placeholder="9876543210" 
+                               class="w-full pl-12 pr-4 py-2.5 bg-cocoa-50/50 border border-cocoa-200 rounded-2xl text-sm font-mono font-bold focus:ring-2 focus:ring-amber-500 outline-none text-cocoa-900">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-cocoa-900 uppercase tracking-wider mb-1">Aaj Ki Hazri (Initial Visit)</label>
+                    <select id="newCustInitialVisits" class="w-full px-4 py-2.5 bg-cocoa-50/50 border border-cocoa-200 rounded-2xl text-sm font-bold focus:ring-2 focus:ring-amber-500 outline-none text-cocoa-900">
+                        <option value="1">1st Visit Today (Day 1 Stamp Lagayein)</option>
+                        <option value="0">0 Visits (Sirf Account Banayein)</option>
+                    </select>
+                </div>
+
+                <div class="pt-2 flex gap-3">
+                    <button type="button" onclick="closeModal('modalNewCustomer')" class="flex-1 py-2.5 border border-cocoa-200 text-cocoa-700 font-bold text-xs rounded-2xl hover:bg-cocoa-50 transition">
+                        Cancel
+                    </button>
+                    <button type="submit" class="flex-1 py-2.5 bg-cocoa-900 hover:bg-black text-amber-300 font-bold text-xs rounded-2xl shadow-md transition border border-cocoa-700">
+                        Save Customer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Modal 2: Admin Settings & Data Backup -->
+    <div id="modalSettings" class="fixed inset-0 bg-cocoa-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-cocoa-100 space-y-6">
+            <div class="flex items-center justify-between border-b border-cocoa-100 pb-3">
+                <h3 class="font-display font-extrabold text-lg text-cocoa-950 flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-amber-500"></i> Cocobelly Admin Settings
+                </h3>
+                <button onclick="closeModal('modalSettings')" class="text-cocoa-400 hover:text-cocoa-700 p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- PIN Change -->
+            <div class="bg-cocoa-50/60 p-4 rounded-2xl border border-cocoa-200 space-y-3">
+                <h4 class="font-bold text-xs uppercase tracking-wider text-cocoa-900">Change Owner PIN</h4>
+                <div class="flex gap-2">
+                    <input type="password" id="changePinInput" placeholder="New PIN (e.g. 5678)" maxlength="6"
+                           class="flex-1 px-3.5 py-2 bg-white border border-cocoa-300 rounded-xl text-sm font-mono outline-none font-bold">
+                    <button onclick="saveNewPin()" class="px-4 py-2 bg-cocoa-900 text-amber-300 font-bold text-xs rounded-xl hover:bg-black transition">
+                        Update PIN
+                    </button>
+                </div>
+            </div>
+
+            <!-- Backup & Sync -->
+            <div class="bg-cocoa-50/60 p-4 rounded-2xl border border-cocoa-200 space-y-3">
+                <h4 class="font-bold text-xs uppercase tracking-wider text-cocoa-900">Data Backup & Restore</h4>
+                <p class="text-xs text-cocoa-600">Cocobelly data local browser me safe hai. Backup JSON file download karke rakhein.</p>
+                <div class="flex gap-2">
+                    <button onclick="exportDataJSON()" class="flex-1 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs rounded-xl shadow-sm transition flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-download"></i> Export Data Backup
+                    </button>
+                    <label class="flex-1 py-2.5 bg-cocoa-800 hover:bg-cocoa-900 text-amber-200 font-bold text-xs rounded-xl shadow-sm transition flex items-center justify-center gap-1.5 cursor-pointer">
+                        <i class="fa-solid fa-upload"></i> Restore Backup
+                        <input type="file" id="importFile" accept=".json" class="hidden" onchange="importDataJSON(event)">
+                    </label>
+                </div>
+            </div>
+
+            <!-- Pre-populate demo & clear data -->
+            <div class="flex items-center justify-between pt-2">
+                <button onclick="loadDemoSampleData()" class="text-xs font-bold text-amber-600 hover:underline">
+                    <i class="fa-solid fa-flask mr-1"></i> Add Demo Test Customers
+                </button>
+                <button onclick="clearAllDataConfirm()" class="text-xs font-bold text-red-600 hover:underline">
+                    <i class="fa-solid fa-trash mr-1"></i> Reset All Data
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+
+    <!-- ========================================================================= -->
+    <!-- JAVASCRIPT APP LOGIC -->
+    <!-- ========================================================================= -->
+    <script>
+        const LOCAL_STORAGE_KEY = 'cocobelly_loyalty_data_v1';
+        
+        let appState = {
+            storeName: 'Cocobelly',
+            adminPIN: '1234',
+            customers: [
+                {
+                    id: 'cust-7808450835',
+                    name: 'Aman Gupta',
+                    mobile: '7808450835',
+                    visitsCount: 3,
+                    giftsClaimed: 0,
+                    lastVisitDate: '2026-11-22',
+                    createdDate: '2026-11-15',
+                    visitHistory: ['2026-11-15', '2026-11-18', '2026-11-22']
+                },
+                {
+                    id: 'cust-9876543210',
+                    name: 'Rahul Verma',
+                    mobile: '9876543210',
+                    visitsCount: 9,
+                    giftsClaimed: 1,
+                    lastVisitDate: '2026-11-22',
+                    createdDate: '2026-11-01',
+                    visitHistory: ['2026-11-01', '2026-11-03', '2026-11-05', '2026-11-08', '2026-11-10', '2026-11-14', '2026-11-17', '2026-11-20', '2026-11-22']
+                }
+            ],
+            offers: [
+                {
+                    id: 'off-1',
+                    badge: '10-DAY REWARD',
+                    title: '10 Visits Poore Karein & Free Surprise Gift Paayein!',
+                    desc: 'Har roz Cocobelly visit par counter se apna digital stamp lagwayein aur 10th visit par assured surprise gift le jayein.'
+                },
+                {
+                    id: 'off-2',
+                    badge: 'WEEKEND SPECIAL',
+                    title: 'Combo Pack Par Flat 20% Off',
+                    desc: 'Is weekend Cocobelly ke sabhi special combos aur treats par payein 20% tak ki chhoot.'
+                }
+            ],
+            reviews: [
+                {
+                    id: 'rev-1',
+                    name: 'Priya Sharma',
+                    rating: 5,
+                    comment: 'Cocobelly ka taste aur service dono zabardast hain! 10-day stamp card wala idea bahut pasand aaya.',
+                    date: '2026-11-22'
+                },
+                {
+                    id: 'rev-2',
+                    name: 'Rohan Das',
+                    rating: 5,
+                    comment: 'Maine apne 10 visits poore kiye aur mujhe sach mein ek bahut pyaara surprise gift mila. Best store!',
+                    date: '2026-11-20'
+                }
+            ]
+        };
+       let isAdminUnlocked = false;
+        let currentFilter = 'all';
+        let selectedReviewRating = 5;
+
+        window.onload = function() {
+            loadStateFromStorage();
+            document.getElementById('yearSpan').textContent = new Date().getFullYear();
+            renderPublicOffers();
+            renderPublicReviews();
+        };
+
+        function loadStateFromStorage() {
+            try {
+                const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    appState = { ...appState, ...parsed };
+                }
+                if (!Array.isArray(appState.offers)) appState.offers = [];
+                if (!Array.isArray(appState.reviews)) appState.reviews = [];
+                
+                // Safety check: ensure 7808450835 is always present
+                if (!appState.customers.some(c => c.mobile === '7808450835')) {
+                    appState.customers.unshift({
+                        id: 'cust-7808450835',
+                        name: 'Aman Gupta',
+                        mobile: '7808450835',
+                        visitsCount: 3,
+                        giftsClaimed: 0,
+                        lastVisitDate: '2026-11-22',
+                        createdDate: '2026-11-15',
+                        visitHistory: ['2026-11-15', '2026-11-18', '2026-11-22']
+                    });
+                }
+                saveStateToStorage();
+            } catch (e) {
+                console.error("Storage load error", e);
+            }
+        }
+
+        function saveStateToStorage() {
+            try {
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(appState));
+            } catch (e) {
+                console.error("Storage save error", e);
+            }
+        }
+
+        function switchView(viewName) {
+            const custView = document.getElementById('customerView');
+            const adminView = document.getElementById('adminView');
+            const btnCust = document.getElementById('btnCustomerTab');
+            const btnAdmin = document.getElementById('btnAdminTab');
+
+            if (viewName === 'customer') {
+                custView.classList.remove('hidden');
+                adminView.classList.add('hidden');
+                btnCust.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-amber-600 text-cocoa-950 shadow-md";
+                btnAdmin.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold text-amber-200 hover:text-white transition flex items-center gap-1.5";
+                renderPublicOffers();
+                renderPublicReviews();
+            } else {
+                custView.classList.add('hidden');
+                adminView.classList.remove('hidden');
+
+                btnAdmin.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-amber-600 text-cocoa-950 shadow-md";
+                btnCust.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold text-amber-200 hover:text-white transition flex items-center gap-1.5";
+
+                if (!isAdminUnlocked) {
+                    document.getElementById('adminPinScreen').classList.remove('hidden');
+                    document.getElementById('adminDashboard').classList.add('hidden');
+                } else {
+                    document.getElementById('adminPinScreen').classList.add('hidden');
+                    document.getElementById('adminDashboard').classList.remove('hidden');
+                    renderAdminDashboard();
+                }
+            }
+          }
+      // --- PUBLIC OFFERS LOGIC (NO PIN) ---
+        function renderPublicOffers() {
+            const grid = document.getElementById('publicOffersGrid');
+            if (!grid) return;
+
+            if (!appState.offers || appState.offers.length === 0) {
+                grid.innerHTML = `
+                    <div class="sm:col-span-2 bg-white p-6 rounded-3xl border border-cocoa-100 text-center text-cocoa-500 text-xs">
+                        Abhi koi special offer active nahi hai. Naye offers ke liye jald check karein!
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = appState.offers.map(offer => `
+                <div class="bg-white rounded-3xl p-5 border border-cocoa-200 shadow-sm hover:shadow-md transition relative overflow-hidden flex flex-col justify-between">
+                    <div class="space-y-2">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-900 border border-amber-300 uppercase tracking-wider">
+                            <i class="fa-solid fa-fire text-amber-600 mr-1"></i> ${offer.badge || 'OFFER'}
+                        </span>
+                        <h4 class="font-display font-extrabold text-base text-cocoa-950 leading-snug">${offer.title}</h4>
+                        <p class="text-xs text-cocoa-600 leading-relaxed">${offer.desc}</p>
+                    </div>
+                    <div class="pt-3 mt-3 border-t border-cocoa-100 flex items-center justify-between text-[11px] font-bold text-cocoa-500">
+                        <span><i class="fa-solid fa-store text-amber-600 mr-1"></i> Valid at Cocobelly Store</span>
+                        <span class="text-emerald-700">Active Now ✓</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // --- PUBLIC REVIEWS LOGIC (NO PIN) ---
+        function setReviewStars(count) {
+            selectedReviewRating = count;
+            document.getElementById('selectedStarText').textContent = `(${count} Star${count > 1 ? 's' : ''})`;
+            document.querySelectorAll('#starRatingSelector .star-btn').forEach(btn => {
+                const starVal = parseInt(btn.getAttribute('data-star'), 10);
+                btn.className = starVal <= count
+                    ? 'star-btn text-amber-400 hover:scale-110 transition'
+                    : 'star-btn text-cocoa-200 hover:scale-110 transition';
+            });
+        }
+
+        function handlePublicReviewSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('revNameInput').value.trim();
+            const comment = document.getElementById('revCommentInput').value.trim();
+            if (!name || !comment) return;
+
+            const newReview = {
+                id: 'rev-' + Date.now(),
+                name: name,
+                rating: selectedReviewRating,
+                comment: comment,
+                date: getTodayDateString()
+            };
+          appState.reviews.unshift(newReview);
+            saveStateToStorage();
+
+            document.getElementById('revNameInput').value = '';
+            document.getElementById('revCommentInput').value = '';
+            setReviewStars(5);
+
+            renderPublicReviews();
+            showToast('Shukriya! Aapka review post ho gaya hai.', 'success');
+        }
+
+        function renderPublicReviews() {
+            const list = document.getElementById('publicReviewsList');
+            const badge = document.getElementById('avgRatingBadge');
+            if (!list) return;
+
+            const reviews = appState.reviews || [];
+            if (reviews.length > 0) {
+                const avg = (reviews.reduce((sum, r) => sum + (r.rating || 5), 0) / reviews.length).toFixed(1);
+                if (badge) badge.textContent = `★ ${avg} / 5 (${reviews.length})`;
+            } else {
+                if (badge) badge.textContent = '★ 5.0 / 5';
+            }
+
+            if (reviews.length === 0) {
+                list.innerHTML = `
+                    <div class="bg-white p-6 rounded-3xl border border-cocoa-100 text-center text-cocoa-500 text-xs">
+                        Abhi tak koi review nahi hai. Pehla review aap likhein!
+                    </div>
+                `;
+                return;
+            }
+
+            list.innerHTML = reviews.map(rev => {
+                const stars = '★'.repeat(rev.rating || 5) + '☆'.repeat(5 - (rev.rating || 5));
+                return `
+                    <div class="bg-white p-4 rounded-2xl border border-cocoa-100 shadow-sm space-y-1.5">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <div class="w-7 h-7 rounded-full bg-cocoa-900 text-amber-300 font-bold text-xs flex items-center justify-center">
+                                    ${rev.name.charAt(0).toUpperCase()}
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-xs text-cocoa-950">${rev.name}</h5>
+                                    <span class="text-[10px] text-cocoa-400">${rev.date || ''}</span>
+                                </div>
+                            </div>
+                            <span class="text-amber-500 text-xs tracking-wider font-bold">${stars}</span>
+                        </div>
+                        <p class="text-xs text-cocoa-700 leading-relaxed pl-9">${rev.comment}</p>
+                    </div>
+                `;
+            }).join('');
+        }
+      / Clean mobile number string helper
+        function sanitizeMobileNumber(str) {
+            if (!str) return '';
+            let cleaned = str.replace(/\D/g, '');
+            if (cleaned.length > 10 && cleaned.startsWith('91')) {
+                cleaned = cleaned.slice(-10);
+            }
+            return cleaned;
+        }
+
+        // --- CUSTOMER LOOKUP ---
+        function fillDemoNumber(num) {
+            document.getElementById('custMobileSearch').value = num;
+            lookupCustomerProgress();
+        }
+
+        function lookupCustomerProgress() {
+            const rawInput = document.getElementById('custMobileSearch').value;
+            const mobileInput = sanitizeMobileNumber(rawInput);
+            const container = document.getElementById('customerResultContainer');
+            const emptyState = document.getElementById('customerEmptyState');
+
+            if (mobileInput.length < 10) {
+                showToast('Kripya 10-digit mobile number likhein', 'warning');
+                return;
+            }
+
+            const cust = appState.customers.find(c => sanitizeMobileNumber(c.mobile) === mobileInput);
+
+            if (!cust) {
+                showToast('Yeh mobile number Cocobelly me registered nahi hai! Store counter par jaakar register karwayein.', 'error');
+                container.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            container.classList.remove('hidden');
+
+            document.getElementById('resCustName').textContent = cust.name;
+            document.getElementById('resCustMobile').textContent = "+91 " + cust.mobile;
+            document.getElementById('resGiftsCount').textContent = cust.giftsClaimed || 0;
+            document.getElementById('resProgressText').textContent = `${cust.visitsCount}/10 Visits`;
+
+            const percentage = (cust.visitsCount / 10) * 100;
+            document.getElementById('resProgressBar').style.width = `${percentage}%`;
+
+            const badge = document.getElementById('resBadgeStatus');
+            const bannerTitle = document.getElementById('resBannerTitle');
+            const bannerDesc = document.getElementById('resBannerDesc');
+
+            if (cust.visitsCount >= 10) {
+                badge.className = "px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-emerald-100 text-emerald-900 border border-emerald-300 animate-bounce";
+                badge.textContent = "🎉 SURPRISE GIFT READY!";
+                
+                bannerTitle.textContent = "Badhai Ho! 10 Visits Poore Hue!";
+                bannerDesc.textContent = "Cocobelly counter par jaakar apna Special Surprise Gift collect karein!";
+
+                triggerConfetti();
+            } else {
+                badge.className = "px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-amber-100 text-amber-900 border border-amber-300";
+                badge.textContent = `In Progress (${10 - cust.visitsCount} Visits Left)`;
+
+                bannerTitle.textContent = `Bas ${10 - cust.visitsCount} visits aur baaki hain!`;
+                bannerDesc.textContent = "Cocobelly store visit par counter se digital stamp lagwayein.";
+            }
+
+            renderStampGrid(cust.visitsCount);
+        }
+      function renderStampGrid(visitsCount) {
+            const grid = document.getElementById('stampGrid');
+            grid.innerHTML = '';
+
+            for (let i = 1; i <= 10; i++) {
+                const isStamped = i <= visitsCount;
+                const isTenth = i === 10;
+
+                const slot = document.createElement('div');
+                if (isStamped) {
+                    slot.className = `aspect-square rounded-2xl flex flex-col items-center justify-center p-2 border-2 shadow-md transition transform scale-100 ${
+                        isTenth
+                            ? 'bg-gradient-to-br from-amber-400 to-amber-600 border-amber-300 text-cocoa-950 animate-amber-pulse'
+                            : 'bg-gradient-to-br from-cocoa-800 to-cocoa-950 border-amber-400/50 text-amber-300'
+                    }`;
+                    slot.innerHTML = `
+                        <i class="fa-solid ${isTenth ? 'fa-gift text-xl' : 'fa-circle-check text-lg'} mb-1"></i>
+                        <span class="text-[10px] font-extrabold uppercase tracking-wider">${isTenth ? 'GIFT!' : 'Day ' + i}</span>
+                    `;
+                } else {
+                    slot.className = `aspect-square rounded-2xl flex flex-col items-center justify-center p-2 border-2 border-dashed ${
+                        isTenth ? 'border-amber-400 bg-amber-50/70 text-amber-700' : 'border-cocoa-200 bg-cocoa-50/60 text-cocoa-400'
+                    }`;
+                    slot.innerHTML = `
+                        <i class="fa-solid ${isTenth ? 'fa-gift text-base text-amber-500' : 'fa-stamp text-sm opacity-40'} mb-1"></i>
+                        <span class="text-[10px] font-bold">${isTenth ? '10th Gift' : 'Day ' + i}</span>
+                    `;
+                }
+                grid.appendChild(slot);
+            }
+        }
+
+        // --- ADMIN / OWNER LOGIC ---
+        function fillDefaultPin() {
+            document.getElementById('adminPinInput').value = appState.adminPIN || '1234';
+            verifyAdminPin();
+        }
+
+        function onPinInput(elem) {
+            if (elem.value.length === (appState.adminPIN || '1234').length) {
+                verifyAdminPin();
+            }
+        }
+
+        function verifyAdminPin() {
+            const input = document.getElementById('adminPinInput').value.trim();
+            const validPin = (appState.adminPIN || '1234').trim();
+
+            if (input === validPin) {
+                isAdminUnlocked = true;
+                document.getElementById('adminPinScreen').classList.add('hidden');
+                document.getElementById('adminDashboard').classList.remove('hidden');
+                renderAdminDashboard();
+                showToast('Cocobelly Owner access unlocked!', 'success');
+            } else {
+                showToast(`Galat PIN (${input})! Sahi PIN: ${validPin}`, 'error');
+                document.getElementById('adminPinInput').value = '';
+            }
+        }
+
+        function lockAdmin() {
+            isAdminUnlocked = false;
+            document.getElementById('adminPinInput').value = '';
+            switchView('admin');
+            showToast('Admin panel locked.', 'info');
+        }
+
+        function getTodayDateString() {
+            const d = new Date();
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+      function renderAdminDashboard() {
+            if (!isAdminUnlocked) return;
+
+            const todayStr = getTodayDateString();
+            
+            const totalCust = appState.customers.length;
+            const todayVisitsCount = appState.customers.filter(c => c.lastVisitDate === todayStr).length;
+            const giftsPending = appState.customers.filter(c => c.visitsCount >= 10).length;
+            const giftsGivenTotal = appState.customers.reduce((acc, curr) => acc + (curr.giftsClaimed || 0), 0);
+
+            document.getElementById('statTotalCustomers').textContent = totalCust;
+            document.getElementById('statTodayVisits').textContent = todayVisitsCount;
+            document.getElementById('statGiftsPending').textContent = giftsPending;
+            document.getElementById('statGiftsGiven').textContent = giftsGivenTotal;
+
+            filterAdminCustomerList();
+            renderAdminOffersAndReviews();
+        }
+
+        // --- ADMIN OFFERS & REVIEWS MANAGEMENT ---
+        function handleAddOffer(e) {
+            e.preventDefault();
+            const title = document.getElementById('offerTitleInput').value.trim();
+            const badge = document.getElementById('offerBadgeInput').value.trim() || 'SPECIAL OFFER';
+            const desc = document.getElementById('offerDescInput').value.trim();
+            if (!title || !desc) return;
+
+            appState.offers.unshift({
+                id: 'off-' + Date.now(),
+                badge: badge.toUpperCase(),
+                title: title,
+                desc: desc
+            });
+
+            saveStateToStorage();
+            document.getElementById('offerTitleInput').value = '';
+            document.getElementById('offerBadgeInput').value = '';
+            document.getElementById('offerDescInput').value = '';
+
+            renderAdminOffersAndReviews();
+            renderPublicOffers();
+            showToast('Naya offer live ho gaya hai!', 'success');
+        }
+
+        function deleteOffer(offerId) {
+            appState.offers = appState.offers.filter(o => o.id !== offerId);
+            saveStateToStorage();
+            renderAdminOffersAndReviews();
+            renderPublicOffers();
+            showToast('Offer hata diya gaya.', 'info');
+        }
+
+        function deleteReview(reviewId) {
+            appState.reviews = appState.reviews.filter(r => r.id !== reviewId);
+            saveStateToStorage();
+            renderAdminOffersAndReviews();
+            renderPublicReviews();
+            showToast('Review delete ho gaya.', 'info');
+        }
+
+        function renderAdminOffersAndReviews() {
+            const offersList = document.getElementById('adminOffersList');
+            const reviewsList = document.getElementById('adminReviewsList');
+            const revCount = document.getElementById('adminReviewCount');
+
+            if (offersList) {
+                if (appState.offers.length === 0) {
+                    offersList.innerHTML = `<p class="text-xs text-cocoa-400 py-4 text-center">Koi active offer nahi hai.</p>`;
+                } else {
+                    offersList.innerHTML = appState.offers.map(o => `
+                        <div class="py-2.5 flex items-start justify-between gap-2">
+                            <div>
+                                <span class="text-[10px] font-extrabold text-amber-700 uppercase">${o.badge}</span>
+                                <h5 class="font-bold text-xs text-cocoa-950">${o.title}</h5>
+                                <p class="text-[11px] text-cocoa-500">${o.desc}</p>
+                            </div>
+                            <button onclick="deleteOffer('${o.id}')" class="p-1.5 text-cocoa-400 hover:text-red-600 transition" title="Delete Offer">
+                                <i class="fa-solid fa-trash-can text-xs"></i>
+                            </button>
+                        </div>
+                    `).join('');
+                }
+            }
+          if (reviewsList) {
+                if (revCount) revCount.textContent = `${appState.reviews.length} Reviews`;
+                if (appState.reviews.length === 0) {
+                    reviewsList.innerHTML = `<p class="text-xs text-cocoa-400 py-4 text-center">Koi review nahi hai.</p>`;
+                } else {
+                    reviewsList.innerHTML = appState.reviews.map(r => `
+                        <div class="py-2.5 flex items-start justify-between gap-2">
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <span class="font-bold text-xs text-cocoa-950">${r.name}</span>
+                                    <span class="text-amber-500 text-xs font-bold">${'★'.repeat(r.rating || 5)}</span>
+                                </div>
+                                <p class="text-[11px] text-cocoa-600 mt-0.5">${r.comment}</p>
+                            </div>
+                            <button onclick="deleteReview('${r.id}')" class="p-1.5 text-cocoa-400 hover:text-red-600 transition" title="Delete Review">
+                                <i class="fa-solid fa-trash-can text-xs"></i>
+                            </button>
+                        </div>
+                    `).join('');
+                }
+            }
+        }
+
+        function filterAdminCustomerList() {
+            const query = document.getElementById('quickMobileInput').value.toLowerCase().trim();
+            const container = document.getElementById('adminCustomerList');
+            const todayStr = getTodayDateString();
+
+            let list = [...appState.customers];
+
+            if (currentFilter === 'gift-ready') {
+                list = list.filter(c => c.visitsCount >= 10);
+            } else if (currentFilter === 'today') {
+                list = list.filter(c => c.lastVisitDate === todayStr);
+            }
+
+            if (query) {
+                list = list.filter(c => c.name.toLowerCase().includes(query) || c.mobile.includes(query));
+            }
+
+            document.getElementById('showingCount').textContent = list.length;
+            container.innerHTML = '';
+
+            if (list.length === 0) {
+                container.innerHTML = `
+                    <div class="p-8 text-center text-cocoa-400">
+                        <i class="fa-solid fa-user-slash text-3xl mb-2"></i>
+                        <p class="text-xs font-semibold">Koi grahak nahi mila.</p>
+                    </div>
+                `;
+                return;
+            }
+          list.forEach(cust => {
+                const isVisitedToday = cust.lastVisitDate === todayStr;
+                const isGiftReady = cust.visitsCount >= 10;
+
+                const card = document.createElement('div');
+                card.className = "p-4 hover:bg-cocoa-50/50 transition flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3";
+
+                card.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-2xl bg-cocoa-900 text-amber-300 font-extrabold flex items-center justify-center text-sm border border-cocoa-700">
+                            ${cust.name.charAt(0).toUpperCase()}
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h4 class="font-bold text-cocoa-950 text-sm">${cust.name}</h4>
+                                ${isVisitedToday ? '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Aaj Aaye (Visited)</span>' : ''}
+                                ${isGiftReady ? '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300 animate-pulse">🎁 GIFT READY</span>' : ''}
+                            </div>
+                            <div class="flex items-center gap-3 text-xs text-cocoa-500 font-mono mt-0.5 font-semibold">
+                                <span>📱 +91 ${cust.mobile}</span>
+                                <span>• Last Visit: ${cust.lastVisitDate || 'N/A'}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end border-t sm:border-t-0 pt-2 sm:pt-0 border-cocoa-100">
+                        <div class="text-right mr-2">
+                            <span class="text-xs font-extrabold ${isGiftReady ? 'text-amber-600' : 'text-cocoa-900'}">${cust.visitsCount}/10 Visits</span>
+                            <div class="w-24 bg-cocoa-100 h-1.5 rounded-full overflow-hidden mt-1">
+                                <div class="h-full ${isGiftReady ? 'bg-amber-500' : 'bg-cocoa-700'}" style="width: ${(cust.visitsCount / 10) * 100}%"></div>
+                            </div>
+                        </div>
+
+                        ${isGiftReady ? `
+                            <button onclick="claimGiftAndReset('${cust.id}')" class="px-3.5 py-1.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-cocoa-950 font-extrabold text-xs rounded-xl shadow-md transition flex items-center gap-1 border border-amber-400">
+                                <i class="fa-solid fa-gift"></i>
+                                <span>Gift Diya & Reset</span>
+                            </button>
+                        ` : `
+                            <button onclick="markVisitForCustomer('${cust.id}')" ${isVisitedToday && !document.getElementById('allowSameDayOverride')?.checked ? 'disabled' : ''} 
+                                class="px-3.5 py-1.5 ${isVisitedToday ? 'bg-cocoa-200 text-cocoa-500 cursor-not-allowed' : 'bg-emerald-700 hover:bg-emerald-800 text-white'} font-bold text-xs rounded-xl shadow-sm transition flex items-center gap-1">
+                                <i class="fa-solid fa-plus"></i>
+                                <span>+1 Stamp</span>
+                            </button>
+                        `}
+
+                        <button onclick="deleteCustomerConfirm('${cust.id}')" class="p-1.5 text-cocoa-400 hover:text-red-600 rounded-lg transition" title="Delete customer">
+                            <i class="fa-solid fa-trash-can text-xs"></i>
+                        </button>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+      function setFilter(filterType) {
+            currentFilter = filterType;
+            const bAll = document.getElementById('filterAll');
+            const bGift = document.getElementById('filterGiftReady');
+            const bToday = document.getElementById('filterToday');
+
+            bAll.className = "px-3 py-1.5 rounded-xl text-xs font-semibold text-cocoa-700 hover:bg-cocoa-100 transition";
+            bGift.className = "px-3 py-1.5 rounded-xl text-xs font-semibold text-cocoa-700 hover:bg-amber-100 hover:text-amber-900 transition";
+            bToday.className = "px-3 py-1.5 rounded-xl text-xs font-semibold text-cocoa-700 hover:bg-cocoa-100 transition";
+
+            if (filterType === 'all') bAll.className = "px-3 py-1.5 rounded-xl text-xs font-bold bg-cocoa-900 text-white shadow-sm";
+            if (filterType === 'gift-ready') bGift.className = "px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500 text-cocoa-950 shadow-sm";
+            if (filterType === 'today') bToday.className = "px-3 py-1.5 rounded-xl text-xs font-bold bg-cocoa-900 text-white shadow-sm";
+
+            renderAdminDashboard();
+        }
+
+        function markVisitForCustomer(custId) {
+            const cust = appState.customers.find(c => c.id === custId);
+            if (!cust) return;
+
+            const todayStr = getTodayDateString();
+            const allowOverride = document.getElementById('allowSameDayOverride')?.checked;
+
+            if (cust.lastVisitDate === todayStr && !allowOverride) {
+                showToast(`🚫 ${cust.name} ki hazri aaj pehle hi lag chuki hai!`, 'error');
+                return;
+            }
+
+            if (cust.visitsCount >= 10) {
+                showToast(`🎁 10 visits poore hain! Pehle surprise gift dekar reset karein.`, 'warning');
+                return;
+            }
+
+            cust.visitsCount += 1;
+            cust.lastVisitDate = todayStr;
+            if (!cust.visitHistory) cust.visitHistory = [];
+            cust.visitHistory.push(todayStr);
+
+            saveStateToStorage();
+            renderAdminDashboard();
+
+            if (cust.visitsCount === 10) {
+                triggerConfetti();
+                showToast(`🎉 Badhai ho! ${cust.name} ke 10 visits poore hue! Gift Ready!`, 'success');
+            } else {
+                showToast(`✅ ${cust.name} ki visit mark ho gayi! Total: ${cust.visitsCount}/10`, 'success');
+            }
+        }
+
+        function quickMarkVisitFromInput() {
+            const query = document.getElementById('quickMobileInput').value.trim();
+            if (!query) {
+                showToast('Kripya mobile number ya naam search karein', 'warning');
+                return;
+            }
+
+            const cust = appState.customers.find(c => c.mobile === query || c.name.toLowerCase() === query.toLowerCase());
+            if (cust) {
+                markVisitForCustomer(cust.id);
+                document.getElementById('quickMobileInput').value = '';
+            } else {
+                showToast('Yeh grahak nahi mila. Kripya naya grahak add karein.', 'warning');
+                openNewCustomerModal();
+                if (/^\d{10}$/.test(query)) {
+                    document.getElementById('newCustMobile').value = query;
+                }
+            }
+        }
+      function claimGiftAndReset(custId) {
+            const cust = appState.customers.find(c => c.id === custId);
+            if (!cust) return;
+
+            cust.giftsClaimed = (cust.giftsClaimed || 0) + 1;
+            cust.visitsCount = 0;
+
+            saveStateToStorage();
+            renderAdminDashboard();
+            triggerConfetti();
+
+            showToast(`🎁 Surprise Gift Delivered! ${cust.name} ka 10-day cycle reset ho gaya!`, 'success');
+        }
+
+        function handleCreateCustomer(e) {
+            e.preventDefault();
+            const name = document.getElementById('newCustName').value.trim();
+            const mobile = document.getElementById('newCustMobile').value.trim();
+            const initialVisits = parseInt(document.getElementById('newCustInitialVisits').value, 10);
+            const todayStr = getTodayDateString();
+
+            if (mobile.length !== 10) {
+                showToast('Mobile number 10 digits ka hona chahiye!', 'error');
+                return;
+            }
+
+            if (appState.customers.some(c => c.mobile === mobile)) {
+                showToast('Yeh mobile number Cocobelly me pehle se registered hai!', 'error');
+                return;
+            }
+
+            const newCust = {
+                id: 'cust-' + Date.now(),
+                name: name,
+                mobile: mobile,
+                visitsCount: initialVisits,
+                giftsClaimed: 0,
+                lastVisitDate: initialVisits > 0 ? todayStr : '',
+                createdDate: todayStr,
+                visitHistory: initialVisits > 0 ? [todayStr] : []
+            };
+
+            appState.customers.unshift(newCust);
+            saveStateToStorage();
+
+            closeModal('modalNewCustomer');
+            document.getElementById('newCustName').value = '';
+            document.getElementById('newCustMobile').value = '';
+
+            renderAdminDashboard();
+            showToast(`Grahak ${name} Cocobelly me register ho gaye!`, 'success');
+        }
+
+        function deleteCustomerConfirm(custId) {
+            const cust = appState.customers.find(c => c.id === custId);
+            if (!cust) return;
+
+            if (confirm(`Kya aap ${cust.name} ka Cocobelly record delete karna chahte hain?`)) {
+                appState.customers = appState.customers.filter(c => c.id !== custId);
+                saveStateToStorage();
+                renderAdminDashboard();
+                showToast('Customer record deleted.', 'info');
+            }
+        }
+
+        // --- BACKUP & SETTINGS ---
+        function openSettingsModal() {
+            document.getElementById('modalSettings').classList.remove('hidden');
+        }
+
+        function saveNewPin() {
+            const newPin = document.getElementById('changePinInput').value.trim();
+            if (newPin.length >= 4) {
+                appState.adminPIN = newPin;
+                saveStateToStorage();
+                document.getElementById('changePinInput').value = '';
+                showToast('Owner PIN updated successfully!', 'success');
+            } else {
+                showToast('PIN kam se kam 4 digits ka rakhein', 'warning');
+            }
+        }
+      function exportDataJSON() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
+            const dlAnchor = document.createElement('a');
+            dlAnchor.setAttribute("href", dataStr);
+            dlAnchor.setAttribute("download", `Cocobelly_Backup_${getTodayDateString()}.json`);
+            document.body.appendChild(dlAnchor);
+            dlAnchor.click();
+            dlAnchor.remove();
+            showToast('Backup File downloaded!', 'success');
+        }
+
+        function importDataJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedState = JSON.parse(e.target.result);
+                    if (importedState && Array.isArray(importedState.customers)) {
+                        appState = importedState;
+                        if (!Array.isArray(appState.offers)) appState.offers = [];
+                        if (!Array.isArray(appState.reviews)) appState.reviews = [];
+                        saveStateToStorage();
+                        renderAdminDashboard();
+                        renderPublicOffers();
+                        renderPublicReviews();
+                        closeModal('modalSettings');
+                        showToast('Cocobelly data restored successfully!', 'success');
+                    } else {
+                        showToast('Invalid backup file format!', 'error');
+                    }
+                } catch (err) {
+                    showToast('File padhne me error aayi.', 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function loadDemoSampleData() {
+            const sample = [
+                { id: 'demo-1', name: 'Ramesh Kumar', mobile: '9876543210', visitsCount: 9, giftsClaimed: 0, lastVisitDate: '2026-11-22', createdDate: '2026-11-01', visitHistory: [] },
+                { id: 'demo-2', name: 'Priya Verma', mobile: '9123456789', visitsCount: 10, giftsClaimed: 1, lastVisitDate: getTodayDateString(), createdDate: '2026-11-05', visitHistory: [] }
+            ];
+            appState.customers = [...sample, ...appState.customers];
+            saveStateToStorage();
+            renderAdminDashboard();
+            closeModal('modalSettings');
+            showToast('Demo customers add ho gaye!', 'info');
+        }
+
+        function clearAllDataConfirm() {
+            if (confirm('Kya aap saara data reset karna chahte hain?')) {
+                localStorage.removeItem(LOCAL_STORAGE_KEY);
+                location.reload();
+            }
+        }
+
+        // --- UTILS ---
+        function openNewCustomerModal() {
+            document.getElementById('modalNewCustomer').classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        function triggerConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 130,
+                    spread: 80,
+                    origin: { y: 0.6 }
+                });
+            }
+        }
+      function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+
+            let bgClass = "bg-cocoa-950 text-amber-200 border border-cocoa-800";
+            let icon = '<i class="fa-solid fa-circle-info text-amber-400"></i>';
+
+            if (type === 'success') {
+                bgClass = "bg-emerald-950 text-emerald-100 border border-emerald-800";
+                icon = '<i class="fa-solid fa-circle-check text-emerald-400"></i>';
+            } else if (type === 'error') {
+                bgClass = "bg-rose-950 text-rose-100 border border-rose-800";
+                icon = '<i class="fa-solid fa-circle-xmark text-rose-400"></i>';
+            } else if (type === 'warning') {
+                bgClass = "bg-amber-950 text-amber-100 border border-amber-800";
+                icon = '<i class="fa-solid fa-triangle-exclamation text-amber-400"></i>';
+            }
+
+            toast.className = `${bgClass} px-4 py-3 rounded-2xl shadow-xl text-xs sm:text-sm font-semibold flex items-center gap-2.5 transition-all duration-300 transform translate-y-2 opacity-0 pointer-events-auto`;
+            toast.innerHTML = `${icon} <span>${message}</span>`;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+    </script>
+</body>
+</html>
